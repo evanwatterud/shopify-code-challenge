@@ -15,26 +15,24 @@ class Todo
   attr_reader :items, :file_name
 
   def initialize(file_name)
-    :file_name = file_name      ## Initialize with a file name in local directory
-    :items = []
+    @file_name = file_name      ## Initialize with a file name in local directory
+    @items = []
   end
 
-  def add(item)
-    item = Item.new(item, Time.now)
+  def add(item, time)
+    item = Item.new(item, time)
     @items.push(item)
     File.open(file_name, "w") do |f|
       f.write(to_s)
     end
-    items
   end
 
   def remove(index)
-    puts "Removing " + @items[index.to_i - 1].stringify
-    @items.delete_at(index.to_i - 1)
+    puts "Removing " + @items[index.to_i].stringify
+    @items.delete_at(index.to_i)
     File.open(file_name, "w") do |f|
       f.write(to_s)
     end
-    items
   end
 
   def clear
@@ -43,10 +41,11 @@ class Todo
     File.open(file_name, "w") do |f|
       f.write(to_s)
     end
-    items
   end
 
   def to_s
-    @items.each{ |item| item.stringify }
+    items = ''
+    @items.each{ |item| items << "#{item.stringify}\n" }
+    items
   end
 end
